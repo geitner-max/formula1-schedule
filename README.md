@@ -1,24 +1,11 @@
 # formula1-ticker
 
 ## Project setup
-```
-npm install
-```
+Small project using the [Ergast API](http://ergast.com/mrd/) for displaying the upcoming formula 1 races.
+This application is written in Vue js.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Features
+- Retrieves race schedule from the Ergast API
+- Countdown for the next Formula 1 race
+- Overview about the remaining schedule

@@ -1,15 +1,13 @@
 <template>
 <div class="next-track-root-container">
   <div v-if="raceTrack !== null" class="next-track-list-item">
-    <svg-icon class="arrow-icon" type="mdi" :path="pathArrow" @click="onPressArrow"></svg-icon>
-    <div class="next-track-list-item-left" @click="onPressArrow">
+    <svg-icon class="arrow-icon" type="mdi" :path="pathArrow" @click="onArrowPress"></svg-icon>
+    <div class="next-track-list-item-left" @click="onArrowPress">
       <h3>{{ raceTrack.raceName }}</h3>
     </div>
     <div class="next-track-list-item-right">
       <h4>{{ getDateRepresentation}}</h4>
     </div>
-
-    
     <div class="clear-fix">
     </div>
     <!-- Box containing infos about the circuit -->
@@ -20,6 +18,7 @@
           <a :href="raceTrack.Circuit.url" target="_blank" rel="noopener noreferrer">Wikipedia</a>
         </li>
         <li>
+          <!-- style of google maps link: https://www.google.de/maps/@<longitude>,<latitude>,<zoom>z -->
           <a>Location: </a><a :href="'https://www.google.de/maps/@' + raceTrack.Circuit.Location.lat + ',' + raceTrack.Circuit.Location.long + ',16z'" target="_blank" rel="noopener noreferrer">{{raceTrack.Circuit.Location.locality}}/{{raceTrack.Circuit.Location.country}}</a>
         </li>
       </ul>
@@ -32,9 +31,8 @@
 </template>
 
 <script>
-//https://www.google.de/maps/@<longitude>,<latitude>,<zoom>z
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiArrowRightBold, mdiArrowDownBold , } from '@mdi/js'
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiArrowRightBold, mdiArrowDownBold , } from '@mdi/js';
 
 export default {
   name: "NextTrackListItem",
@@ -49,13 +47,14 @@ export default {
   },
   data() {
     return {
-      isHidden: true,
-      pathArrow: mdiArrowRightBold ,
+      isHidden: true,                   // flag for showing additional information about the track
+      pathArrow: mdiArrowRightBold ,    // value of displayed icon
     };
   },
 
   computed: {
     getDateRepresentation() {
+      // display date and time of the race in a suitable format
       var dateRace = new Date(Date.now());
       if (this.raceTrack !== null) {
         dateRace = new Date(
@@ -68,7 +67,8 @@ export default {
     },
   },
   methods: {
-    onPressArrow(){
+    onArrowPress(){
+        // method for toggling arrow icon state and isHidden flag
         this.isHidden = !this.isHidden;
         this.pathArrow = this.isHidden ? mdiArrowRightBold : mdiArrowDownBold ;
     },
@@ -97,7 +97,7 @@ export default {
   box-sizing: border-box;
 }
 
-/* settings for grid layout for small screens*/
+/* settings for grid layout and small screens*/
 @media only screen and (max-width: 600px) {
   .next-track-list-item{
     grid-template-columns: [arrow] 20px [name] auto [date] auto;
@@ -150,6 +150,5 @@ ul {
   text-align: left;
   margin: 5px;
 }
-
 
 </style>

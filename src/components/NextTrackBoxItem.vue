@@ -8,7 +8,8 @@
         <h5>Next Race starts in:</h5>
         <h3><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h3>
       </div>
-      <h3 v-else>{{countdownValue}}</h3>
+      <h3 v-else>{{strInfoMessage
+}}</h3>
     </div>
   </div>
 </template>
@@ -23,14 +24,13 @@ export default {
   },
   data() {
     return {
-      isFinished: true,
-      countdownValue: "",
-      showCountdown: true,
-      days: 0,
+      strInfoMessage: "",     // message displayed when there is no countdown
+      showCountdown: true,   // flag for showing countdown
+      days: 0,               // numerical values for the countdown
       hours: 0,
       minutes: 0,
       seconds: 0,
-      timer: "",
+      timer: null,
     };
   },
   created() {
@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     setCountdownRepresentation() {
+      // set current countdown value depending on current time and time of the next race
       var dateNow = new Date(Date.now());
       if (this.raceTrack !== null) {
         const dateRace = new Date(
@@ -49,7 +50,7 @@ export default {
         );
         //compute time difference
         if (dateNow > dateRace) {
-          this.countdownValue = "Event has started.";
+          this.strInfoMessage = "Event has started.";
           this.showCountdown = false;
         } else {
           //valid date, compute days, hours and minutes until the race starts
@@ -62,9 +63,7 @@ export default {
           this.hours = diff_hours;
           this.minutes = diff_minutes;
           this.seconds = diff_seconds;
-          //return dateNow;
-          this.countdownValue =
-            diff_days +
+          this.strInfoMessage = diff_days +
             " days " +
             diff_hours +
             " hours " +
@@ -75,7 +74,7 @@ export default {
           this.showCountdown = true;
         }
       } else {
-        this.countdownValue = "Racetime unknown";
+        this.strInfoMessage = "Racetime unknown";
         this.showCountdown = false;
       }
     },
@@ -115,19 +114,8 @@ h3 {
   margin: 40px 0 0;
   font-size: 32px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
 h1 {
   color: #42b983;
   font-size: 48px;
-}
-a {
-  color: #42b983;
 }
 </style>

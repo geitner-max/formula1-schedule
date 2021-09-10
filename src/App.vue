@@ -1,16 +1,16 @@
 <template>
   <body>
-    <next-track-box></next-track-box>
+    <next-track-screen></next-track-screen>
   </body>
 </template>
 
 <script>
-import NextTrackBox from './components/NextTrackBox.vue'
+import NextTrackScreen from './components/NextTrackScreen.vue'
 
 export default {
   name: 'App',
   components: {
-    NextTrackBox
+    NextTrackScreen
   },
 }
 </script>
