@@ -4,8 +4,11 @@
       <h1>{{ raceTrack.raceName }}</h1>
       <h4>{{ raceTrack.Circuit.circuitName }} - {{ getDateRepresentation }}</h4>
       <br />
-      <h5>Next Race starts in:</h5>
-      <h3><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h3>
+      <div v-if="showCountdown">
+        <h5>Next Race starts in:</h5>
+        <h3><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h3>
+      </div>
+      <h3 v-else>{{countdownValue}}</h3>
     </div>
   </div>
 </template>
@@ -22,7 +25,7 @@ export default {
     return {
       isFinished: true,
       countdownValue: "",
-      hasCountdown: true,
+      showCountdown: true,
       days: 0,
       hours: 0,
       minutes: 0,
@@ -34,6 +37,9 @@ export default {
     this.setCountdownRepresentation();
     this.timer = setInterval(this.setCountdownRepresentation, 1000);
   },
+  unmounted(){
+    clearInterval(this.timer);
+  },
   methods: {
     setCountdownRepresentation() {
       var dateNow = new Date(Date.now());
@@ -44,6 +50,7 @@ export default {
         //compute time difference
         if (dateNow > dateRace) {
           this.countdownValue = "Event has started.";
+          this.showCountdown = false;
         } else {
           //valid date, compute days, hours and minutes until the race starts
           const diff = dateRace.getTime() - dateNow.getTime();
@@ -65,24 +72,24 @@ export default {
             " minutes " +
             diff_seconds +
             " seconds";
+          this.showCountdown = true;
         }
       } else {
         this.countdownValue = "Racetime unknown";
+        this.showCountdown = false;
       }
     },
   },
 
   computed: {
     getDateRepresentation() {
-      var dateRace = new Date(Date.now());
       if (this.raceTrack !== null) {
-        dateRace = new Date(
-          Date.parse(this.raceTrack.date + " " + this.raceTrack.time)
-        );
+        var dateRace = new Date( Date.parse(this.raceTrack.date + " " + this.raceTrack.time));
+        return dateRace.toLocaleString();
       } else {
         return "Racetime unknown";
       }
-      return dateRace.toLocaleString();
+      
     },
   },
 };
