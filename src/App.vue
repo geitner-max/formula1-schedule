@@ -1,16 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <body>
+    <next-track-box></next-track-box>
+  </body>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NextTrackBox from './components/NextTrackBox.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    NextTrackBox
+  },
 }
 </script>
 
@@ -21,6 +22,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: whitesmoke;
+}
+body{
+  background-color: whitesmoke;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>
