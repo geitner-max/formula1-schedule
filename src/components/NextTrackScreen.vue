@@ -104,7 +104,7 @@ export default {
       // find first race that hasn't happened yet
       var nextRaceIndex = raceTable.findIndex(e => 
       {
-        var dateRace = new Date(e.date);
+        var dateRace = new Date(e.date + " " + e.time);
         return curDate < dateRace;
       });
       if(nextRaceIndex !== -1 && nextRaceIndex !== null){
@@ -137,7 +137,7 @@ export default {
 }
 .box-container {
   padding-top: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   align-content: center;
   background-color: whitesmoke;
 }

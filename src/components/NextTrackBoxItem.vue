@@ -7,6 +7,18 @@
       <div v-if="showCountdown">
         <h5>Next Race starts in:</h5>
         <h3><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h3>
+        <div class="btn-wrapper">
+          <a :href="raceTrack.Circuit.url" target="_blank" rel="noopener noreferrer">
+            <button class="btn">
+              Wikipedia
+            </button>
+          </a>
+          <a :href="'https://www.google.de/maps/@' + raceTrack.Circuit.Location.lat + ',' + raceTrack.Circuit.Location.long + ',16z'" target="_blank" rel="noopener noreferrer">
+          <button class="btn" >
+            {{raceTrack.Circuit.Location.locality + "/" + raceTrack.Circuit.Location.country}}
+          </button>
+          </a>
+        </div>
       </div>
       <h3 v-else>{{strInfoMessage
 }}</h3>
@@ -117,5 +129,22 @@ h3 {
 h1 {
   color: #42b983;
   font-size: 48px;
+}
+.btn-wrapper {
+  padding-top: 50px;
+
+}
+.btn {
+  padding: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+  background-color: #42b983;
+  font-size: 20px;
+  color: black;
+  border-style: solid;
+  border-radius: 5px;
+}
+.btn:hover{
+  color: white;
 }
 </style>
