@@ -1,16 +1,16 @@
 <template>
   <body>
-    <next-track-screen></next-track-screen>
+    <schedule-screen></schedule-screen>
   </body>
 </template>
 
 <script>
-import NextTrackScreen from './components/NextTrackScreen.vue'
+import ScheduleScreen from './components/ScheduleScreen.vue'
 
 export default {
   name: 'App',
   components: {
-    NextTrackScreen
+    ScheduleScreen
   },
 }
 </script>

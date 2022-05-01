@@ -21,13 +21,13 @@
 <script>
 import { inject } from 'vue';
 import schedule from './../assets/race_schedule_response.json';
-import NextTrackBoxItem from './NextTrackBoxItem.vue';
-import NextTrackListItem from './NextTrackListItem.vue';
-
+import NextTrackBoxItem from './subcomponents/NextTrackBoxItem.vue';
+import NextTrackListItem from './subcomponents/NextTrackListItem.vue';
+import "@/main.css";
 
 export default {
   components: { NextTrackBoxItem, NextTrackListItem },
-  name: 'NextTrackScreen',
+  name: 'ScheduleScreen',
   props: {
     dateRace: {
       type: Date,
@@ -129,36 +129,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.root-container {
-  background-color: whitesmoke;
-}
-.box-container {
-  padding-top: 20px;
-  padding-bottom: 30px;
-  align-content: center;
-  background-color: whitesmoke;
-}
-.schedule-container {
-  border: 2;
-  border-style: solid none none none;
-}
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-p {
-  background-color: whitesmoke;
-  color: #42b983;
-  font-size: 40px;
-}
-</style>

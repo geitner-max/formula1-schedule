@@ -1,12 +1,12 @@
 <template>
   <div class="box-container">
     <div v-if="raceTrack !== null">
-      <h1>{{ raceTrack.raceName }}</h1>
-      <h4>{{ raceTrack.Circuit.circuitName }} - {{ getDateRepresentation }}</h4>
+      <h1 class="margin-title">{{ raceTrack.raceName }}</h1>
+      <h2>{{ raceTrack.Circuit.circuitName }} - {{ getDateRepresentation }}</h2>
       <br />
       <div v-if="showCountdown">
         <h5>Next Race starts in:</h5>
-        <h3><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h3>
+        <h2><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h2>
         <div class="btn-wrapper">
           <a :href="raceTrack.Circuit.url" target="_blank" rel="noopener noreferrer">
             <button class="btn">
@@ -20,13 +20,17 @@
           </a>
         </div>
       </div>
-      <h3 v-else>{{strInfoMessage
-}}</h3>
+      <h3 v-else>
+        {{strInfoMessage}}
+      </h3>
     </div>
   </div>
 </template>
 
 <script>
+import "@/main.css";
+
+
 export default {
   name: "NextTrackBoxItem",
   props: {
@@ -106,45 +110,3 @@ export default {
 };
 </script>
 
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.box-container {
-  align-content: center;
-}
-.highlighted-text {
-  color: #f55050;
-}
-h4{
-  font-size: 28px;
-}
-h5 {
-  font-size: 24px;
-}
-h3 {
-  margin: 40px 0 0;
-  font-size: 32px;
-}
-h1 {
-  color: #42b983;
-  font-size: 48px;
-}
-.btn-wrapper {
-  padding-top: 50px;
-
-}
-.btn {
-  padding: 15px;
-  margin-left: 15px;
-  margin-right: 15px;
-  background-color: #42b983;
-  font-size: 20px;
-  color: black;
-  border-style: solid;
-  border-radius: 5px;
-}
-.btn:hover{
-  color: white;
-}
-</style>
