@@ -1,34 +1,23 @@
 <template>
   <body>
-    <schedule-screen></schedule-screen>
+    <page-header/>
+    <router-view></router-view>
+    
   </body>
 </template>
 
 <script>
-import ScheduleScreen from './components/ScheduleScreen.vue'
+//import ScheduleScreen from './components/ScheduleScreen.vue'
+import {RouterView} from "vue-router";
+import PageHeader from './components/subcomponents/PageHeader.vue';
+import "@/main.css";
 
 export default {
   name: 'App',
   components: {
-    ScheduleScreen
+    RouterView,
+    PageHeader
   },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  background-color: whitesmoke;
-}
-body{
-  background-color: whitesmoke;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-</style>
