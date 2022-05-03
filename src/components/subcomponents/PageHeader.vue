@@ -1,10 +1,15 @@
 <template>
     <div class="page-header">
         
-        <button @click="onClickSchedule" class="header-button"> Schedule</button>
-        
-        <button @click="onClickStandings" class="header-button"> Standings</button>
-        
+
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div target="nav-collapse"></div>
+            <ul>
+                <li @click="onClickSchedule" type="button" class="btn btn-primary" variant="outline-primary"> Schedule</li>
+                
+                <li @click="onClickStandings" type="button" class="btn btn-primary" variant="outline-primary"> Standings</li>
+            </ul>
+        </nav> 
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="box-container">
     <div v-if="raceTrack !== null">
-      <h1 class="margin-title">{{ raceTrack.raceName }}</h1>
+      <h1 class="margin-title display-3">{{ raceTrack.raceName }}</h1>
       <h2>{{ raceTrack.Circuit.circuitName }} - {{ getDateRepresentation }}</h2>
       <br />
       <div v-if="showCountdown">
@@ -9,12 +9,12 @@
         <h2><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h2>
         <div class="btn-wrapper">
           <a :href="raceTrack.Circuit.url" target="_blank" rel="noopener noreferrer">
-            <button class="btn">
+            <button  type="button" id="btn-primary-hover" class="btn btn-primary">
               Wikipedia
             </button>
           </a>
           <a :href="'https://www.google.de/maps/@' + raceTrack.Circuit.Location.lat + ',' + raceTrack.Circuit.Location.long + ',16z'" target="_blank" rel="noopener noreferrer">
-          <button class="btn" >
+          <button type="button" id="btn-primary-hover" class="btn btn-primary" >
             {{raceTrack.Circuit.Location.locality + "/" + raceTrack.Circuit.Location.country}}
           </button>
           </a>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import "@/main.css";
 
 
 export default {

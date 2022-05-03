@@ -1,5 +1,7 @@
 <template>
+
   <body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <page-header/>
     <router-view></router-view>
     
@@ -10,7 +12,7 @@
 //import ScheduleScreen from './components/ScheduleScreen.vue'
 import {RouterView} from "vue-router";
 import PageHeader from './components/subcomponents/PageHeader.vue';
-import "@/main.css";
+
 
 export default {
   name: 'App',

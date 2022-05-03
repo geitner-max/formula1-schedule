@@ -3,10 +3,10 @@
   <div v-if="raceTrack !== null" class="next-track-list-item">
     <svg-icon class="arrow-icon" type="mdi" :path="pathArrow" @click="onArrowPress"></svg-icon>
     <div class="next-track-list-item-left" @click="onArrowPress">
-      <h3>{{ raceTrack.raceName }}</h3>
+      <h4>{{ raceTrack.raceName }}</h4>
     </div>
     <div class="next-track-list-item-right">
-      <h4>{{ getDateRepresentation}}</h4>
+      <h5>{{ getDateRepresentation}}</h5>
     </div>
     <div class="clear-fix">
     </div>
@@ -33,7 +33,7 @@
 <script>
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiArrowRightBold, mdiArrowDownBold , } from '@mdi/js';
-import "@/main.css";
+
 
 export default {
   name: "NextTrackListItem",

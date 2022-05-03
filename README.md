@@ -25,5 +25,8 @@ npm build
 ```
 
 
+## Compile Theme Colors
+```
+sass src/theme/custom.scss:src/theme/custom.css
 
-
+```
