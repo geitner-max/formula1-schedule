@@ -14,7 +14,7 @@ import Standings from '/src/components/Standings';
 
 import "@/theme/custom.css";
 import "@/main.css";
-//import PageNotFound from '/src/components/PageNotFound';
+import PageNotFound from '/src/components/PageNotFound';
 
 // 1. Define some routes
 // Each route should map to a component.
@@ -22,7 +22,7 @@ import "@/main.css";
 const routes = [
   { path: '/', component: ScheduleScreen },
   { path: '/standings', component: Standings },
-  /*{ path: "*", component: PageNotFound }*/
+  { path: "/:pathMatch(.*)*", component: PageNotFound }
 ]
 
 

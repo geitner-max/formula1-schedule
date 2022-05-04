@@ -4,7 +4,7 @@
       <h1 class="margin-title display-3">{{ raceTrack.raceName }}</h1>
       <h2>{{ raceTrack.Circuit.circuitName }} - {{ getDateRepresentation }}</h2>
       <br />
-      <div v-if="showCountdown">
+      <div style= "margin-top: 50px;" v-if="showCountdown">
         <h5>Next Race starts in:</h5>
         <h2><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h2>
         <div class="btn-wrapper">
