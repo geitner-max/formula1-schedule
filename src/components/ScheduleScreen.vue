@@ -19,15 +19,17 @@
 
 
 <script>
-import { inject } from 'vue';
 import schedule from './../assets/race_schedule_response.json';
 import NextTrackBoxItem from './subcomponents/NextTrackBoxItem.vue';
 import NextTrackListItem from './subcomponents/NextTrackListItem.vue';
-import "@/main.css";
+import FetchMixin from './../util/FetchMixin';
 
 export default {
   components: { NextTrackBoxItem, NextTrackListItem },
   name: 'ScheduleScreen',
+  mixins: [
+    FetchMixin,
+  ],
   props: {
     dateRace: {
       type: Date,
@@ -45,7 +47,6 @@ export default {
     };
   },
   created () {
-    this.axios = inject('axios'); // init axios for http requests
     const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
     this.processUpdateRequest(strCurrentYear);
     // start timer for periodically schedule updates (every two hour)
@@ -56,41 +57,25 @@ export default {
   },
   methods: {
     updateSchedule(){
-      const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
+      const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString();
       this.processUpdateRequest(strCurrentYear);
     },
-    processUpdateRequest(year) {
+    async processUpdateRequest(year) {
       // build url
-      const apiRequest = "http://ergast.com/api/f1/" + year + ".json";
       var raceTable = null
 
       if(this.useLocalData){
         raceTable = schedule.MRData.RaceTable.Races;
         this.processRaceTable(raceTable);
       }else{
-        // send request and process response
-        this.axios.get(apiRequest).then((response) => {
-          if(response.status !== 200){
-            //invalid response code
-            this.strResponse = "Request for current Formula 1 schedule failed!";
-            this.hasValidData = false;
-          }else{
-            //console.log(response.data)
-            raceTable = response.data.MRData.RaceTable.Races
-            //look at response
-            if(response.data.MRData.RaceTable.Races == null){
-              this.strResponse = "Response has an invalid data format!";
-              this.hasValidData = false;
-            }else if(response.data.MRData.RaceTable.Races.length === 0){
-              //valid response, but the race scheduled hasn't been published yet.
-              this.strResponse = "Formula 1 Schedule TBA";
-              this.hasValidData = false;
-            }else{
-              this.hasValidData = true;
-              this.processRaceTable(raceTable);
-            }
-          }
-        })
+        const result = await this.fetchRaceSchedule(year);
+        if(result.status === 200) {
+          this.hasValidData = true;
+          this.processRaceTable(result.value);
+        }else{
+          this.hasValidData = false;
+          this.strResponse = result.message;
+        }
       }
     },
     processRaceTable(raceTable){

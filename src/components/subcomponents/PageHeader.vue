@@ -3,7 +3,7 @@
         
 
         <nav class="navbar navbar-expand-lg navbar-light">
-            <div target="nav-collapse"></div>
+            
             <ul>
                 <li @click="onClickSchedule" type="button" class="btn btn-primary" variant="outline-primary"> Schedule</li>
                 
