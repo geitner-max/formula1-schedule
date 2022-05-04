@@ -77,6 +77,9 @@ p {
     margin: auto;
     margin: 20px;
 }
+#countdown-text {
+    font-weight: 600;
+}
 .arrow-icon {
     flex-grow: 1;
     align-self: bottom;

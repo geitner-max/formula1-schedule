@@ -6,7 +6,7 @@
       <br />
       <div style= "margin-top: 50px;" v-if="showCountdown">
         <h5>Next Race starts in:</h5>
-        <h2><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h2>
+        <h2 id="countdown-text"><span class="highlighted-text">{{days}}</span> days <span class="highlighted-text">{{hours}}</span> hours <span class="highlighted-text">{{minutes}}</span> minutes <span class="highlighted-text">{{seconds}}</span> seconds</h2>
         <div class="btn-wrapper">
           <a :href="raceTrack.Circuit.url" target="_blank" rel="noopener noreferrer">
             <button  type="button" id="btn-primary-hover" class="btn btn-primary">
