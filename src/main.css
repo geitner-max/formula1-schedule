@@ -149,6 +149,10 @@ p {
     text-align: left;
     min-width: 50%;
 }
+.chart-container {
+    width: 600px;
+    min-height: 300px;
+}
 
 
 

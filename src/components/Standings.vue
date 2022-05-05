@@ -22,6 +22,7 @@
         
         </tbody>
       </table>
+      <standings-chart :chartOptions="chartOptions" :chartData="chartData"/>
     </div>
       <div class="table-container">
         <h2>Driver Standings</h2>
@@ -51,9 +52,11 @@
 
 <script>
 import FetchMixin from '../util/FetchMixin';
+import StandingsChart from './subcomponents/StandingsChart.vue';
+import TeamColors from '../assets/teamcolors';
 
 export default {
-  components: { },
+  components: {StandingsChart },
   mixins: [
     FetchMixin,
   ],
@@ -61,7 +64,6 @@ export default {
   data () {
     
     return {
-      fields2: ['name', 'points', ],
       itemsConstructors: [],
       itemsDrivers: [],
       itemsConstructorTest: [
@@ -71,16 +73,14 @@ export default {
         {pos: 2, name: "Williams", points: 12, wins: 0,},
         {pos: 2, name: "Aston Martin", points: 10, wins: 0,},
       ],
-      fields: ['first_name', 'last_name', 'age'],
-        items: [
-          { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-          { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
-        ]
+      chartOptions: {
+          responsive: true,
+          maintainAspectRatio: false
+      },
+      chartData: null,
     }
   },
-  created() {
+  async created() {
      // init axios for http requests
     //const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
     //const currentStandings = "http://ergast.com/api/f1/current/constructorStandings.json";
@@ -99,7 +99,18 @@ export default {
     }else{
       this.processDriverStandings(driverData);
     }
-   
+    // process chart data
+    if(constructorStandingsData) {
+      let season = constructorStandingsData.MRData.StandingsTable.StandingsLists[0].season;
+      let round = constructorStandingsData.MRData.StandingsTable.StandingsLists[0].round;
+      let chartTemp = [];
+      for(let prevRound = 1; prevRound < round; prevRound++) {
+        let data = await this.fetchConstructorStandingsByYearAndRound(season, prevRound)
+        chartTemp.push(data);
+      }
+      chartTemp.push(constructorStandingsData);
+      this.processConstructorChartData(chartTemp, round);
+   }
     
   },
   methods: {
@@ -125,8 +136,43 @@ export default {
           permanentNumber: driver.Driver.permanentNumber,
         });
      }
-   }
+   },
+   processConstructorChartData(data, roundsCompleted) {
+     
+    // find teams
+    data = data.map(e => e.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
+    let teams = this.getTeams(data[0]);
 
+    // make points data more accessible, round[team_name] with entry {position, points}
+    data = data.map(roundData => {
+        let result = {};
+        for(let entry of roundData) {
+          result[entry.Constructor.name] = {position: entry.position, points: entry.points};
+        }
+        return result;
+      }
+    );
+    let dataset = teams.map(team => {
+      let valuesPoints = this.getDataByTeam(data, team, "points");
+      return {label: team, data: valuesPoints, borderColor: this.getTeamcolor(team), backgroundColor: this.getTeamcolor(team)};
+    });
+    this.chartData = {labels: Array.from({length: roundsCompleted}, (_, i) => "Round " + (i + 1)), datasets: dataset};
+   },
+   getTeams(constrStandingsData) {
+     return constrStandingsData.map(e => e.Constructor.name);
+   },
+   getDataByTeam(data, teamName, attribute) {
+     return data.map(round => round[teamName][attribute]);
+   },
+   getTeamcolor(teamname) {
+     if(Object.prototype.hasOwnProperty.call(TeamColors, teamname)) {
+
+       return TeamColors[teamname];
+     }else{
+       console.log("Error color: ",teamname);
+       return "#111";
+     }
+   }
   }
 }
 </script>

@@ -36,6 +36,32 @@ export default {
             }
           }
         },
+        async fetchConstructorStandingsByYearAndRound(year, round) {
+          // http://ergast.com/api/f1/2008/5/constructorStandings.json
+          let data = this.getWithExpiry("constructorStandings");
+          const key = year + "_" + round;
+
+          if(data && Object.prototype.hasOwnProperty.call(data, key)) {
+            // use local data
+            return data[key];
+          } else {
+            // fetch data from api
+            const apiRequest = "http://ergast.com/api/f1/" + year + "/" + round + "/constructorStandings.json";
+            const response = await this.axios.get(apiRequest);
+            if (response.status !== 200) {
+                console.log("Error, no valid response received");
+                return null;
+            }else {
+              // modify object
+              if (!data) {
+                data = {};
+              }
+              data[key] = response.data;
+              this.setItemWithExpiry("constructorStandings", data, 1000 * 3600 * 12);
+              return response.data;
+            }
+          }
+        },
         fetchCurrentDriverStandings() {
             if(this.useLocalData){
                 this.setItemWithExpiry("currentDriverStandings",driverStandingsData, 1000 * 3600 * 12); // 12 hours valid
