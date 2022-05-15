@@ -1,34 +1,25 @@
 <template>
+
   <body>
-    <next-track-screen></next-track-screen>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <page-header/>
+    <router-view></router-view>
+    
   </body>
 </template>
 
 <script>
-import NextTrackScreen from './components/NextTrackScreen.vue'
+//import ScheduleScreen from './components/ScheduleScreen.vue'
+import {RouterView} from "vue-router";
+import PageHeader from './components/subcomponents/PageHeader.vue';
+
 
 export default {
   name: 'App',
   components: {
-    NextTrackScreen
+    RouterView,
+    PageHeader
   },
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  background-color: whitesmoke;
-}
-body{
-  background-color: whitesmoke;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-</style>
