@@ -75,6 +75,7 @@ export default {
             if(newValue === 0) {
                 this.selectedYear = 0;
             }else if(newValue !== oldValue) {
+                this.selectedYear = 0;
                 this.optionYears = this.generateYears(this.selectedDecade);
             }
         },
@@ -83,6 +84,7 @@ export default {
             if(newValue === 0) {
                 this.selectedRound = 0;
             }else if(newValue !== oldValue) {
+                this.selectedRound = 0;
                 this.optionRounds = await this.generateRoundsOptions(newValue);
             }
             console.log(this.optionRounds);
