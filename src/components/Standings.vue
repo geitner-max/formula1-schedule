@@ -22,7 +22,9 @@
         
         </tbody>
       </table>
-      <standings-chart :chartOptions="chartOptions" :chartData="chartData"/>
+      <div v-if="roundsCompleted > 0" >
+        <standings-chart :chartOptions="chartOptions" :chartData="chartData"/>
+      </div>
     </div>
       <div class="table-container">
         <h2>Driver Standings</h2>
@@ -66,6 +68,7 @@ export default {
     return {
       itemsConstructors: [],
       itemsDrivers: [],
+      roundsCompleted: 0,
       chartOptions: {
           responsive: true,
           maintainAspectRatio: false,
@@ -113,15 +116,15 @@ export default {
     // process chart data
     if(constructorStandingsData) {
       let season = constructorStandingsData.MRData.StandingsTable.StandingsLists[0].season;
-      let round = constructorStandingsData.MRData.StandingsTable.StandingsLists[0].round;
+      this.roundsCompleted = constructorStandingsData.MRData.StandingsTable.StandingsLists[0].round;
       let chartTemp = [];
-      for(let prevRound = 1; prevRound < round; prevRound++) {
+      for(let prevRound = 1; prevRound < this.roundsCompleted; prevRound++) {
         let data = await this.fetchConstructorStandingsByYearAndRound(season, prevRound)
         chartTemp.push(data);
       }
       chartTemp.push(constructorStandingsData);
       let raceSchedule = await this.fetchRaceSchedule(strCurrentYear);
-      this.processConstructorChartData(chartTemp, raceSchedule, round);
+      this.processConstructorChartData(chartTemp, raceSchedule, this.roundsCompleted);
    }
     
   },
@@ -135,8 +138,8 @@ export default {
    },
    processDriverStandings(responseData) {
      let driverStandings = responseData.MRData.StandingsTable.StandingsLists[0].DriverStandings;
-     //console.log(driverStandings);
      this.itemsDrivers = [];
+     // data for table
      for(let driver of driverStandings) {
         this.itemsDrivers.push({
           name: driver.Driver.givenName + " " + driver.Driver.familyName, 
@@ -150,7 +153,6 @@ export default {
      }
    },
    processConstructorChartData(dataConstr, raceSchedule, roundsCompleted) {
-     
     // find teams
     dataConstr = dataConstr.map(e => e.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
     let teams = this.getTeams(dataConstr[0]);
@@ -171,10 +173,8 @@ export default {
     let labelMapping = Array.from({length: roundsCompleted}, (_, i) => "Round " + (i + 1));
     if(raceSchedule.status == 200) {
       labelMapping = raceSchedule.value.map(race => race.raceName);
-      // only display completed races
+      // only display completed races in the chart
       labelMapping = labelMapping.splice(0, roundsCompleted);
-      //console.log(schedule);
-      
     }
     this.chartData = {labels: labelMapping, datasets: dataset};
    },
@@ -185,8 +185,8 @@ export default {
      return data.map(round => round[teamName][attribute]);
    },
    getTeamcolor(teamname) {
+     // colors in the chart
      if(Object.prototype.hasOwnProperty.call(TeamColors, teamname)) {
-
        return TeamColors[teamname];
      }else{
        console.log("Error color: ",teamname);

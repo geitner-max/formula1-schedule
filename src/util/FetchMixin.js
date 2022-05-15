@@ -2,8 +2,8 @@ import { inject } from 'vue';
 import UtilMixin from './UtilMixin';
 import constructorStandingsData from './../assets/constructor_standings_response.json';
 import driverStandingsData from './../assets/driver_standings_response.json';
-export default {
 
+export default {
     name: "FetchMixin",
     useLocalData: false,
     mixins: [UtilMixin],
@@ -85,26 +85,24 @@ export default {
             }
         },
         async fetchRaceSchedule(year) {
-            const apiRequest = "http://ergast.com/api/f1/" + year + ".json";
-             // send request and process response
-            let response = await this.axios.get(apiRequest); //.then((response) => {
-            if(response.status !== 200){
-              //invalid response code
-              return {status: response.status, message: "Request for current Formula 1 schedule failed!"};
+          const apiRequest = "http://ergast.com/api/f1/" + year + ".json";
+          // send request and process response
+          let response = await this.axios.get(apiRequest); //.then((response) => {
+          if(response.status !== 200){
+            //invalid response code
+            return {status: response.status, message: "Request for current Formula 1 schedule failed!"};
+          }else{
+            let raceTable = response.data.MRData.RaceTable.Races
+            //look at response
+            if(response.data.MRData.RaceTable.Races == null){
+              return {status: 404, message: "Response has an invalid data format!"};
+            }else if(response.data.MRData.RaceTable.Races.length === 0){
+              //valid response, but the race scheduled hasn't been published yet.
+              return {status: 404, message: "Formula 1 Schedule TBA"};
             }else{
-              //console.log(response.data)
-              let raceTable = response.data.MRData.RaceTable.Races
-              //look at response
-              if(response.data.MRData.RaceTable.Races == null){
-                return {status: 404, message: "Response has an invalid data format!"};
-              }else if(response.data.MRData.RaceTable.Races.length === 0){
-                //valid response, but the race scheduled hasn't been published yet.
-                return {status: 404, message: "Formula 1 Schedule TBA"};
-              }else{
-                return {status: 200, value: raceTable};
-              }
+              return {status: 200, value: raceTable};
             }
-          //})
+          }
         }
     },
 }
