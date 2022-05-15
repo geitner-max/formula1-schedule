@@ -2,7 +2,7 @@
     <div class="chart-container">
         <Line 
             v-if="chartData !== null && chartOptions !== null"
-            :chart-id="line-chart" 
+            chart-id="line-chart" 
             :chart-data="chartData"
             :chart-options="chartOptions"
             :width="500"
@@ -49,11 +49,11 @@ export default {
     props: {
         chartData: {
             required: true,
-            default: null,
+            default: {},
         },
         chartOptions: {
             required: true,
-            default: null,
+            default: {},
         }
     },
     setup() {

@@ -78,13 +78,22 @@ export default {
                 }
             }
         },
+        plugins: {
+            legend: {
+                labels: {
+                    font: {
+                        size: 14
+                    }
+                }
+            }
+        },
       },
       chartData: null,
     }
   },
   async mounted() {
      // init axios for http requests
-    //const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
+    const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
     //const currentStandings = "http://ergast.com/api/f1/current/constructorStandings.json";
     //const api = "http://ergast.com/api/f1/" + strCurrentYear + "/constructorStandings" + ".json";
     //console.log(currentStandings); //http://ergast.com/api/f1/current/constructorStandings.json
@@ -111,7 +120,8 @@ export default {
         chartTemp.push(data);
       }
       chartTemp.push(constructorStandingsData);
-      this.processConstructorChartData(chartTemp, round);
+      let raceSchedule = await this.fetchRaceSchedule(strCurrentYear);
+      this.processConstructorChartData(chartTemp, raceSchedule, round);
    }
     
   },
@@ -125,7 +135,7 @@ export default {
    },
    processDriverStandings(responseData) {
      let driverStandings = responseData.MRData.StandingsTable.StandingsLists[0].DriverStandings;
-     console.log(driverStandings);
+     //console.log(driverStandings);
      this.itemsDrivers = [];
      for(let driver of driverStandings) {
         this.itemsDrivers.push({
@@ -139,14 +149,14 @@ export default {
         });
      }
    },
-   processConstructorChartData(data, roundsCompleted) {
+   processConstructorChartData(dataConstr, raceSchedule, roundsCompleted) {
      
     // find teams
-    data = data.map(e => e.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
-    let teams = this.getTeams(data[0]);
+    dataConstr = dataConstr.map(e => e.MRData.StandingsTable.StandingsLists[0].ConstructorStandings);
+    let teams = this.getTeams(dataConstr[0]);
 
     // make points data more accessible, round[team_name] with entry {position, points}
-    data = data.map(roundData => {
+    dataConstr = dataConstr.map(roundData => {
         let result = {};
         for(let entry of roundData) {
           result[entry.Constructor.name] = {position: entry.position, points: entry.points};
@@ -155,10 +165,18 @@ export default {
       }
     );
     let dataset = teams.map(team => {
-      let valuesPoints = this.getDataByTeam(data, team, "points");
+      let valuesPoints = this.getDataByTeam(dataConstr, team, "points");
       return {label: team, data: valuesPoints, borderColor: this.getTeamcolor(team), backgroundColor: this.getTeamcolor(team)};
     });
-    this.chartData = {labels: Array.from({length: roundsCompleted}, (_, i) => "Round " + (i + 1)), datasets: dataset};
+    let labelMapping = Array.from({length: roundsCompleted}, (_, i) => "Round " + (i + 1));
+    if(raceSchedule.status == 200) {
+      labelMapping = raceSchedule.value.map(race => race.raceName);
+      // only display completed races
+      labelMapping = labelMapping.splice(0, roundsCompleted);
+      //console.log(schedule);
+      
+    }
+    this.chartData = {labels: labelMapping, datasets: dataset};
    },
    getTeams(constrStandingsData) {
      return constrStandingsData.map(e => e.Constructor.name);
