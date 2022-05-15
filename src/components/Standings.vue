@@ -66,34 +66,36 @@ export default {
     return {
       itemsConstructors: [],
       itemsDrivers: [],
-      itemsConstructorTest: [
-        {pos: 1, name: "Mercedes", points: 25, wins: 1},
-        {pos: 2, name: "Red Bull", points: 18, wins: 0,},
-        {pos: 2, name: "Ferrari", points: 15, wins: 0,},
-        {pos: 2, name: "Williams", points: 12, wins: 0,},
-        {pos: 2, name: "Aston Martin", points: 10, wins: 0,},
-      ],
       chartOptions: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: {
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 60,
+                    minRotation: 60
+                }
+            }
+        },
       },
       chartData: null,
     }
   },
-  async created() {
+  async mounted() {
      // init axios for http requests
     //const strCurrentYear = new Date(Date.now()).getUTCFullYear().toString(); // get current year
     //const currentStandings = "http://ergast.com/api/f1/current/constructorStandings.json";
     //const api = "http://ergast.com/api/f1/" + strCurrentYear + "/constructorStandings" + ".json";
     //console.log(currentStandings); //http://ergast.com/api/f1/current/constructorStandings.json
-    let constructorStandingsData = this.fetchCurrentConstructorStandings();
+    let constructorStandingsData = await this.fetchCurrentConstructorStandings();
     if (!constructorStandingsData){
       this.itemsConstructors = [];
     }else{
       this.processConstructorStandings(constructorStandingsData);
     }
 
-    let driverData = this.fetchCurrentDriverStandings();
+    let driverData = await this.fetchCurrentDriverStandings();
     if (!driverData){
       this.itemsDrivers = [];
     }else{

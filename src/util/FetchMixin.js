@@ -11,7 +11,7 @@ export default {
         this.axios = inject('axios');
     },
     methods: {
-        fetchCurrentConstructorStandings() {
+        async fetchCurrentConstructorStandings() {
         if(this.useLocalData){
             // use sample data
             this.setItemWithExpiry("currentConstructorStandings",constructorStandingsData, 1000 * 3600 * 12); // 12 hours valid
@@ -22,15 +22,14 @@ export default {
             if(!data) {
               // fetch request, if data expired
               const apiRequest = "http://ergast.com/api/f1/current/constructorStandings.json";
-              this.axios.get(apiRequest).then((response) => {
-                if (response.status !== 200) {
-                    console.log("Error, no valid response received");
-                    return null;
-                }else {
-                  this.setItemWithExpiry("currentConstructorStandings",response.data, 1000 * 3600 * 12);
-                  return response.data;
-                }
-              });
+              let response = await this.axios.get(apiRequest);
+              if (response.status !== 200) {
+                  console.log("Error, no valid response received");
+                  return null;
+              }else {
+                this.setItemWithExpiry("currentConstructorStandings",response.data, 1000 * 3600 * 12);
+                return response.data;
+              }
             }else{
               return data;
             }
@@ -62,7 +61,7 @@ export default {
             }
           }
         },
-        fetchCurrentDriverStandings() {
+        async fetchCurrentDriverStandings() {
             if(this.useLocalData){
                 this.setItemWithExpiry("currentDriverStandings",driverStandingsData, 1000 * 3600 * 12); // 12 hours valid
             return driverStandingsData;
@@ -70,17 +69,16 @@ export default {
                 // fetch data from storage if available
                 const data = this.getWithExpiry("currentDriverStandings");
                 if(!data) {
-                // fetch request, if data expired
-                const apiRequest = "http://ergast.com/api/f1/current/driverStandings.json";
-                this.axios.get(apiRequest).then((response) => {
-                    if (response.status !== 200) {
-                        console.log("Error, no valid response received");
-                        return null;
-                    }else {
-                    this.setItemWithExpiry("currentDriverStandings",response.data, 1000 * 3600 * 12);
-                    return response.data;
-                    }
-                });
+                  // fetch request, if data expired
+                  const apiRequest = "http://ergast.com/api/f1/current/driverStandings.json";
+                  let response = await this.axios.get(apiRequest);
+                  if (response.status !== 200) {
+                      console.log("Error, no valid response received");
+                      return null;
+                  }else {
+                  this.setItemWithExpiry("currentDriverStandings",response.data, 1000 * 3600 * 12);
+                  return response.data;
+                  }
                 }else{
                     return data;
                 }
