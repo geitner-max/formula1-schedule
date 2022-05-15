@@ -9,12 +9,23 @@
   align-content: center;
   background-color: whitesmoke;
 }
-/*.box-container {
-    align-content: center;
-}*/
+.selection-container{
+    max-width: 1200px;
+    min-width: 50%;
+    align-items: flex-start;
+}
+.flex-container{
+    display: flex;
+    justify-content: center;
+}
 .schedule-container {
   border: 2;
   border-style: solid none none none;
+}
+.row-container{
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px; 
 }
 
 h1 {
@@ -23,6 +34,10 @@ h1 {
 }
 h2{
     font-size: 36px;
+}
+.h2-select {
+    text-align: start;
+    margin: 20px;
 }
 
 ul {

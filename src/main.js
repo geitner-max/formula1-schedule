@@ -9,6 +9,7 @@ import "bootstrap";
 
 import ScheduleScreen from '/src/components/ScheduleScreen';
 import Standings from '/src/components/Standings';
+import Analysis from '/src/components/Analysis';
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 
@@ -22,6 +23,7 @@ import PageNotFound from '/src/components/PageNotFound';
 const routes = [
   { path: '/', component: ScheduleScreen },
   { path: '/standings', component: Standings },
+  { path: '/analysis', component: Analysis },
   { path: "/:pathMatch(.*)*", component: PageNotFound }
 ]
 

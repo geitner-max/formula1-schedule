@@ -7,7 +7,9 @@
             <ul>
                 <li @click="onClickSchedule" type="button" class="btn btn-primary" variant="outline-primary"> Schedule</li>
                 
-                <li @click="onClickStandings" type="button" class="btn btn-primary" variant="outline-primary"> Standings</li>
+                <li @click="onClickStandings" type="button" class="btn btn-primary" variant="outline-primary">Standings</li>
+
+                <li @click="onClickAnalysis" type="button" class="btn btn-primary" variant="outline-primary">Analysis</li>
             </ul>
         </nav> 
     </div>
@@ -25,6 +27,9 @@ export default {
         },
         onClickStandings() {
             this.$router.push("/standings");
+        },
+        onClickAnalysis() {
+            this.$router.push("/analysis");
         }
     },
 }
