@@ -30,7 +30,7 @@
                     </option>
                 </select>
             </div>
-            <h2 class="h2-select">Results </h2>
+            <h2 class="h2-select">Result </h2>
             <race-result-table :data="dataRaceResult"/>
             <h2 class="h2-select">Driver Selection </h2>
         </div>
@@ -59,7 +59,7 @@ export default {
             optionDecades: [],
             optionYears: [],
             optionRounds: [],
-            dataRaceResult: [{name: "Sebastian", startingPos: "1", finishingPos: "1", totalTime: "1:34:45", fastestLap: "1:45:123"}],
+            dataRaceResult: null,//[{name: "Sebastian", startingPos: "1", finishingPos: "1", totalTime: "1:34:45", fastestLap: "1:45:123"}],
         };
     },
     mounted() {
@@ -74,7 +74,6 @@ export default {
         }
         console.log(2022 < curYear);
         console.log(this.optionDecades);
-        this.prepareRaceResultTable(2019, 17);
     },
     watch: {
         selectedDecade(newValue, oldValue) {
@@ -95,6 +94,11 @@ export default {
             }
             console.log(this.optionRounds);
         },
+        async selectedRound(newValue, oldValue) {
+            if(newValue !== 0 && newValue !== oldValue) {
+                this.prepareRaceResultTable(this.selectedYear, this.selectedRound);
+            }
+        }
     },
     methods: {
         generateYears(decade) {
@@ -119,19 +123,25 @@ export default {
         },
         async prepareRaceResultTable(year, round) {
             let raceResult = await this.fetchRaceResult(year, round);
-            raceResult = raceResult.MRData.RaceTable.Races[0].Results;
             console.log(raceResult);
-            raceResult = raceResult.map(item => {
-                console.log(item);
-                return {
-                    name: item.Driver.givenName + " " + item.Driver.familyName,
-                    startingPos: this.formatStartingPos(item),
-                    finishingPos: item.position, 
-                    totalTime: this.formatTotalTime(item),
-                    fastestLap: item.FastestLap.Time.time,
-                };
-            });
-            this.dataRaceResult = raceResult;
+            if(raceResult !== null && raceResult !== undefined && raceResult.MRData.RaceTable.Races[0] !== undefined) {
+                raceResult = raceResult.MRData.RaceTable.Races[0].Results;
+                console.log(raceResult);
+                raceResult = raceResult.map(item => {
+                    console.log(item);
+                    return {
+                        name: item.Driver.givenName + " " + item.Driver.familyName,
+                        startingPos: this.formatStartingPos(item),
+                        finishingPos: item.position, 
+                        totalTime: this.formatTotalTime(item),
+                        fastestLap: (item.FastestLap)?item.FastestLap.Time.time:"",
+                    };
+                });
+                this.dataRaceResult = raceResult;
+            }else{
+                this.dataRaceResult = null;
+            }
+            
         },
         formatTotalTime(item) {
             if(item.status === "Finished") {

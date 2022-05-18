@@ -106,11 +106,18 @@ export default {
           }
         },
         async fetchRaceResult(year, round) {
-          const val = true;
-          if(this.useLocalData || val) {
+          if(this.useLocalData) {
             return localRaceResult;
           }else {
             console.log(year, round);
+            const apiRequest = `http://ergast.com/api/f1/${year}/${round}/results.json`;
+            console.log(apiRequest);
+            let response = await this.axios.get(apiRequest);
+            if(response.status === 200) {
+              return response.data;
+            }else {
+              return null;
+            }
           }
         }
     },
