@@ -2,6 +2,7 @@ import { inject } from 'vue';
 import UtilMixin from './UtilMixin';
 import constructorStandingsData from './../assets/constructor_standings_response.json';
 import driverStandingsData from './../assets/driver_standings_response.json';
+import localRaceResult from './../assets/race_result_response.json';
 
 export default {
     name: "FetchMixin",
@@ -102,6 +103,14 @@ export default {
             }else{
               return {status: 200, value: raceTable};
             }
+          }
+        },
+        async fetchRaceResult(year, round) {
+          const val = true;
+          if(this.useLocalData || val) {
+            return localRaceResult;
+          }else {
+            console.log(year, round);
           }
         }
     },

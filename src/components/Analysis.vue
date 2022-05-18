@@ -31,6 +31,7 @@
                 </select>
             </div>
             <h2 class="h2-select">Results </h2>
+            <race-result-table :data="dataRaceResult"/>
             <h2 class="h2-select">Driver Selection </h2>
         </div>
     </div>
@@ -40,9 +41,12 @@
 
 <script>
 import FetchMixin from '../util/FetchMixin';
+import RaceResultTable from './subcomponents/RaceResultTable.vue';
 
 export default {
+  components: { RaceResultTable },
     name: "Analysis",
+   
     mixins: [FetchMixin],
     setup() {
         
@@ -55,6 +59,7 @@ export default {
             optionDecades: [],
             optionYears: [],
             optionRounds: [],
+            dataRaceResult: [{name: "Sebastian", startingPos: "1", finishingPos: "1", totalTime: "1:34:45", fastestLap: "1:45:123"}],
         };
     },
     mounted() {
@@ -69,6 +74,7 @@ export default {
         }
         console.log(2022 < curYear);
         console.log(this.optionDecades);
+        this.prepareRaceResultTable(2019, 17);
     },
     watch: {
         selectedDecade(newValue, oldValue) {
@@ -110,6 +116,36 @@ export default {
                 });
             }
             return results;
+        },
+        async prepareRaceResultTable(year, round) {
+            let raceResult = await this.fetchRaceResult(year, round);
+            raceResult = raceResult.MRData.RaceTable.Races[0].Results;
+            console.log(raceResult);
+            raceResult = raceResult.map(item => {
+                console.log(item);
+                return {
+                    name: item.Driver.givenName + " " + item.Driver.familyName,
+                    startingPos: this.formatStartingPos(item),
+                    finishingPos: item.position, 
+                    totalTime: this.formatTotalTime(item),
+                    fastestLap: item.FastestLap.Time.time,
+                };
+            });
+            this.dataRaceResult = raceResult;
+        },
+        formatTotalTime(item) {
+            if(item.status === "Finished") {
+                return item.Time.time;
+            }else {
+                return item.status;
+            }
+        },
+        formatStartingPos(item) {
+            if(item.grid === "0") {
+                return "Pitlane Start";
+            }else {
+                return item.grid;
+            }
         }
     }
 }
