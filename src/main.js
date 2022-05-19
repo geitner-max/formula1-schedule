@@ -11,6 +11,12 @@ import ScheduleScreen from '/src/components/ScheduleScreen';
 import Standings from '/src/components/Standings';
 import Analysis from '/src/components/Analysis';
 
+
+// tooltip
+import FloatingVue from 'floating-vue'
+import 'floating-vue/dist/style.css'
+
+
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 
 import "@/theme/custom.css";
@@ -37,8 +43,9 @@ const router = createRouter({
   
 
 const app = createApp(App)
-    app.use(router)
-    app.use(VueAxios, axios)
-    app.provide('axios', app.config.globalProperties.axios)
-    
-    app.mount('#app')
+  app.use(FloatingVue)
+  app.use(router)
+  app.use(VueAxios, axios)
+  app.provide('axios', app.config.globalProperties.axios)
+  
+  app.mount('#app')

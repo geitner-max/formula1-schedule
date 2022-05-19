@@ -13,15 +13,17 @@
           </thead>
           <tbody>
             <tr v-for="(item,) in data" :key="item.name">
-              <th>{{item.finishingPos}}</th>
-              <td scope="row">
-                <country-flag v-if="item.nationality.length === 2" :country='item.nationality' size='small'/>
+              <th class="table-text-align">{{item.finishingPos}}</th>
+              <td class="table-text-align" scope="row">
+                <div v-if="item.nationality.code !== undefined">
+                    <country-flag class="flag-container" v-tooltip="item.nationality.name" :country='item.nationality.code' size="normal"/> 
+                </div>
                 <span v-else>{{item.nationality}} </span>
               </td>
-              <td scope="row">{{item.name}}</td>
-              <td>{{item.startingPos}}</td>
-              <td>{{item.totalTime}}</td>
-              <td>{{item.fastestLap}}</td>
+              <td class="table-text-align" scope="row">{{item.name}}</td>
+              <td class="table-text-align">{{item.startingPos}}</td>
+              <td class="table-text-align">{{item.totalTime}}</td>
+              <td class="table-text-align">{{item.fastestLap}}</td>
             </tr>
           </tbody>
         </table>
@@ -36,10 +38,12 @@
 <script>
 import CountryFlag from 'vue-country-flag-next'
 
+
 export default {
     name: "RaceResultTable",
     components: {
         CountryFlag,
+        //VTooltip,
     },
     data () {
     return {

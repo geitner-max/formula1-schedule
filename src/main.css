@@ -28,6 +28,13 @@
     padding: 10px; 
 }
 
+.flag-container{
+    margin: 20px;
+}
+.table-text-align {
+    vertical-align: middle;
+}
+
 h1 {
     color: #42b983;
     font-size: 48px;
