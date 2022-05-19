@@ -20,6 +20,8 @@
     "vue": "^3.2.33",
     "vue-axios": "^3.2.5",
     "vue-chartjs": "^4.1.0",
+    "vue-country-flag": "^2.3.2",
+    "vue-country-flag-next": "^2.3.2",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {

@@ -119,6 +119,12 @@ export default {
               return null;
             }
           }
+        },
+        async fetchLapTimesByYearRound(year, round, offset=0, limit=100) {
+          const apiRequest = `http://ergast.com/api/f1/${year}/${round}/laps.json?limit=${limit}&offset=${offset}`;
+          //http://ergast.com/api/f1/2011/5/laps.json?limit=30&offset=100
+          let response = await this.axios.get(apiRequest);
+          return response;
         }
     },
 }

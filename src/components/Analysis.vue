@@ -42,6 +42,7 @@
 <script>
 import FetchMixin from '../util/FetchMixin';
 import RaceResultTable from './subcomponents/RaceResultTable.vue';
+import Nationality from '../util/Nationality.json';
 
 export default {
   components: { RaceResultTable },
@@ -72,8 +73,6 @@ export default {
             this.optionDecades.push({value: decade, label: label});
             decade += 10;
         }
-        console.log(2022 < curYear);
-        console.log(this.optionDecades);
     },
     watch: {
         selectedDecade(newValue, oldValue) {
@@ -92,7 +91,6 @@ export default {
                 this.selectedRound = 0;
                 this.optionRounds = await this.generateRoundsOptions(newValue);
             }
-            console.log(this.optionRounds);
         },
         async selectedRound(newValue, oldValue) {
             if(newValue !== 0 && newValue !== oldValue) {
@@ -126,7 +124,6 @@ export default {
             console.log(raceResult);
             if(raceResult !== null && raceResult !== undefined && raceResult.MRData.RaceTable.Races[0] !== undefined) {
                 raceResult = raceResult.MRData.RaceTable.Races[0].Results;
-                console.log(raceResult);
                 raceResult = raceResult.map(item => {
                     console.log(item);
                     return {
@@ -135,6 +132,7 @@ export default {
                         finishingPos: item.position, 
                         totalTime: this.formatTotalTime(item),
                         fastestLap: (item.FastestLap)?item.FastestLap.Time.time:"",
+                        nationality: this.formatNationality(item.Driver.nationality),
                     };
                 });
                 this.dataRaceResult = raceResult;
@@ -155,6 +153,13 @@ export default {
                 return "Pitlane Start";
             }else {
                 return item.grid;
+            }
+        },
+        formatNationality(value) {
+            if(Nationality[value] !== undefined) {
+                return Nationality[value];
+            }else {
+                return value;
             }
         }
     }
