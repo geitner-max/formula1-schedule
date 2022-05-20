@@ -3,6 +3,9 @@ import UtilMixin from './UtilMixin';
 import constructorStandingsData from './../assets/constructor_standings_response.json';
 import driverStandingsData from './../assets/driver_standings_response.json';
 import localRaceResult from './../assets/race_result_response.json';
+import lapTimes1 from './../assets/LapTimesResponse1.json';
+import lapTimes2 from './../assets/LapTimesResponse2.json';
+import lapTimes3 from './../assets/LapTimesResponse3.json';
 
 export default {
     name: "FetchMixin",
@@ -121,10 +124,44 @@ export default {
           }
         },
         async fetchLapTimesByYearRound(year, round, offset=0, limit=100) {
-          const apiRequest = `http://ergast.com/api/f1/${year}/${round}/laps.json?limit=${limit}&offset=${offset}`;
-          //http://ergast.com/api/f1/2011/5/laps.json?limit=30&offset=100
-          let response = await this.axios.get(apiRequest);
-          return response;
-        }
+          let val = false;
+          if(this.useLocalData || val) {
+            if(offset === 0) {
+              return {status: 200, data: lapTimes1};
+            }else if(offset === 100) {
+              return {status: 200, data: lapTimes2};
+            }else {
+              return {status: 200, data: lapTimes3};
+            }
+          }else{
+            const apiRequest = `http://ergast.com/api/f1/${year}/${round}/laps.json?limit=${limit}&offset=${offset}`;
+            //http://ergast.com/api/f1/2011/5/laps.json?limit=30&offset=100
+            console.log(apiRequest);
+            let response = await this.axios.get(apiRequest);
+            return response;
+          }
+        },
+        async fetchAllLapTimesByYearRound(year, round) {
+          /// aggregate results from all individual API requests
+          if(year === undefined || round === undefined) {
+            return;
+          }
+          let result = [];
+          let offset = 0;
+          const limit = 100;
+          let tempResult;
+          // collect responses with Laptime data
+          do{
+            tempResult = await this.fetchLapTimesByYearRound(year, round, offset, limit);
+            if(tempResult.status === 200 && tempResult.data !== null && tempResult.data.MRData.RaceTable.Races.length > 0) {
+              tempResult = tempResult.data.MRData.RaceTable.Races[0].Laps;
+              result.push(tempResult);
+            }else {
+              break;
+            }
+            offset += limit;
+          }while(tempResult !== null);
+          return result;
+        },
     },
 }

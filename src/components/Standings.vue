@@ -55,12 +55,13 @@
 <script>
 import FetchMixin from '../util/FetchMixin';
 import StandingsChart from './subcomponents/StandingsChart.vue';
-import TeamColors from '../assets/teamcolors';
+import UtilMixin from '../util/UtilMixin';
 
 export default {
   components: {StandingsChart },
   mixins: [
     FetchMixin,
+    UtilMixin,
   ],
   name: 'Standings',
   data () {
@@ -177,6 +178,7 @@ export default {
       labelMapping = labelMapping.splice(0, roundsCompleted);
     }
     this.chartData = {labels: labelMapping, datasets: dataset};
+    console.log(this.chartData);
    },
    getTeams(constrStandingsData) {
      return constrStandingsData.map(e => e.Constructor.name);
@@ -184,15 +186,6 @@ export default {
    getDataByTeam(data, teamName, attribute) {
      return data.map(round => round[teamName][attribute]);
    },
-   getTeamcolor(teamname) {
-     // colors in the chart
-     if(Object.prototype.hasOwnProperty.call(TeamColors, teamname)) {
-       return TeamColors[teamname];
-     }else{
-       console.log("Error color: ",teamname);
-       return "#111";
-     }
-   }
   }
 }
 </script>

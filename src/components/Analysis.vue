@@ -32,7 +32,16 @@
             </div>
             <h2 class="h2-select">Result </h2>
             <race-result-table :data="dataRaceResult"/>
-            <h2 class="h2-select">Driver Selection </h2>
+            <h2 class="h2-select">Charts </h2>
+            <div class="row-container">
+                <select v-model="selectedChart" id="selectedChart" style="width:auto;" class="form-select" aria-label="select chart">
+                    <option :value='0'>Select Chart</option>
+                    <option v-for="(item,index) of optionCharts" :key="index" :value="index+1">
+                        {{item}}
+                    </option>
+                </select>
+            </div>
+            <lap-times-chart v-if="laptimeData && selectedChart === 1" :chartOptions="chartOptions" :lapTimes="laptimeData" :driverMapping="driverMapping" />
         </div>
     </div>
 </div>
@@ -43,12 +52,19 @@
 import FetchMixin from '../util/FetchMixin';
 import RaceResultTable from './subcomponents/RaceResultTable.vue';
 import Nationality from '../util/Nationality.json';
-
+import LapTimesChart from './subcomponents/LapTimesChart.vue';
+import UtilMixin from '../util/UtilMixin';
 export default {
-  components: { RaceResultTable },
+  components: { 
+    RaceResultTable,
+    LapTimesChart 
+  },
     name: "Analysis",
    
-    mixins: [FetchMixin],
+    mixins: [
+        FetchMixin, 
+        UtilMixin,
+      ],
     setup() {
         
     },
@@ -61,6 +77,32 @@ export default {
             optionYears: [],
             optionRounds: [],
             dataRaceResult: null,//[{name: "Sebastian", startingPos: "1", finishingPos: "1", totalTime: "1:34:45", fastestLap: "1:45:123"}],
+            optionCharts: ["Laptimes", "Position Changes", "Gap To Leader", "Laptimes by Stint (1)", "Laptimes By Stint (2)"],
+            selectedChart: 0,
+            driverMapping: null,
+            laptimeData: null,
+            chartOptions: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                xAxes: {
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 60,
+                        minRotation: 60
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            },
+        },
         };
     },
     mounted() {
@@ -73,6 +115,7 @@ export default {
             this.optionDecades.push({value: decade, label: label});
             decade += 10;
         }
+        this.selectedDecade = 2010;
     },
     watch: {
         selectedDecade(newValue, oldValue) {
@@ -95,10 +138,46 @@ export default {
         async selectedRound(newValue, oldValue) {
             if(newValue !== 0 && newValue !== oldValue) {
                 this.prepareRaceResultTable(this.selectedYear, this.selectedRound);
+                this.laptimeData = null;
+                this.prepareLaptimeData();
             }
+        },
+        async selectedChart(newValue) {
+            console.log(newValue);
+            this.prepareLaptimeData();
         }
     },
     methods: {
+        async prepareLaptimeData() {
+            if(this.selectedChart !== 0 && this.selectedYear !== 0 && this.selectedRound !== 0 && this.laptimeData === null) {
+                console.log("Fetch for ", this.selectedYear, this.selectedRound);
+                let rawLapTimeData = await this.fetchAllLapTimesByYearRound(this.selectedYear, this.selectedRound);
+                this.laptimeData = this.preprocessLaptimeData(rawLapTimeData);
+            
+            }
+        },
+        preprocessLaptimeData(rawData) {
+            //console.log(rawData);
+            let resultLapTimesByDriver =  {}; // {"vettel": [<laptimes>], "hamilton": [<laptimes>]}
+            for(let rawDataPart of rawData) {
+                let rawDataPartInner = rawDataPart.flat();
+                for(let lap of rawDataPartInner) {
+                    let lapNumber = lap.number;
+                    for(let lapObj of lap.Timings) {
+                        // add lap to result array sorted by array
+                        let driverId = lapObj.driverId;
+                        let objToAdd = {number: lapNumber, position: lapObj.position, time: lapObj.time};
+                        if(Object.prototype.hasOwnProperty.call(resultLapTimesByDriver, driverId)) {
+                            // add to existing entry
+                            resultLapTimesByDriver[driverId].push(objToAdd);
+                        }else {
+                            resultLapTimesByDriver[driverId] = [objToAdd];
+                        }
+                    }
+                }
+            }
+            return resultLapTimesByDriver;
+        },
         generateYears(decade) {
             const curYear = new Date(Date.now()).getUTCFullYear();
             let results = [];
@@ -121,11 +200,11 @@ export default {
         },
         async prepareRaceResultTable(year, round) {
             let raceResult = await this.fetchRaceResult(year, round);
-            console.log(raceResult);
+            //console.log(raceResult);
             if(raceResult !== null && raceResult !== undefined && raceResult.MRData.RaceTable.Races[0] !== undefined) {
-                raceResult = raceResult.MRData.RaceTable.Races[0].Results;
-                raceResult = raceResult.map(item => {
-                    console.log(item);
+                let raceResultBefore = raceResult.MRData.RaceTable.Races[0].Results;
+                raceResult = raceResultBefore.map(item => {
+                    //console.log(item);
                     return {
                         name: item.Driver.givenName + " " + item.Driver.familyName,
                         startingPos: this.formatStartingPos(item),
@@ -136,10 +215,19 @@ export default {
                     };
                 });
                 this.dataRaceResult = raceResult;
+                this.driverMapping = this.calculateDriverIdMapping(raceResultBefore);
             }else{
                 this.dataRaceResult = null;
             }
             
+        },
+        calculateDriverIdMapping(raceResult) {
+            let result = {};
+            for(let item of raceResult) {
+                result[item.Driver.driverId] = item.Driver;
+                result[item.Driver.driverId]["color"] = this.getTeamcolor(item.Constructor.name);
+            }
+            return result;
         },
         formatTotalTime(item) {
             if(item.status === "Finished") {

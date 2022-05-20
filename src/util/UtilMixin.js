@@ -1,4 +1,4 @@
-
+import TeamColors from '../assets/teamcolors';
 
 export default {
     name: "UtilMixin",
@@ -45,6 +45,15 @@ export default {
                 return item.value;
             }
             return null;
-        }
+        },
+        getTeamcolor(teamname) {
+            // colors in the chart
+            if(Object.prototype.hasOwnProperty.call(TeamColors, teamname)) {
+              return TeamColors[teamname];
+            }else{
+              console.log("Error color: ",teamname);
+              return "#111";
+            }
+          }
     }
 }
