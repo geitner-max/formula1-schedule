@@ -1,6 +1,9 @@
 <template>
+    <div v-if="lapTimes === null || lapTimes === undefined || lapTimes === null" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
     <Line
-        v-if="chartData !== null"
+        v-else
         chart-id="line-chart-lap-times"
         :chart-data="chartData"
         :chart-options="chartOptions"

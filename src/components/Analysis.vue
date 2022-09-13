@@ -41,9 +41,9 @@
                     </option>
                 </select>
             </div>
-            <lap-times-chart v-if="laptimeData && selectedChart === 1" :chartOptions="chartOptions" :lapTimes="laptimeData" :driverMapping="driverMapping" />
-            <position-changes-chart v-if="laptimeData && selectedChart === 2" :lapTimes="laptimeData" :driverMapping="driverMapping" />
-            <leader-gap-chart v-if="laptimeData && selectedChart === 3" :lapTimes="laptimeData" :driverMapping="driverMapping" />
+            <lap-times-chart v-if="selectedChart === 1" :chartOptions="chartOptions" :lapTimes="laptimeData" :driverMapping="driverMapping" />
+            <position-changes-chart v-if="selectedChart === 2" :lapTimes="laptimeData" :driverMapping="driverMapping" />
+            <leader-gap-chart v-if="selectedChart === 3" :lapTimes="laptimeData" :driverMapping="driverMapping" />
         </div>
         
     </div>
@@ -116,14 +116,15 @@ export default {
     mounted() {
         // initialize decades
         let decade = 1950;
+        this.selectedDecade = 1950;
         this.optionDecades = [];
         const curYear = new Date(Date.now()).getUTCFullYear();
         while(decade < curYear) {
             const label = (decade < 2000)? (decade%100) + "'s" : "" + decade + "'s";
             this.optionDecades.push({value: decade, label: label});
+            this.selectedDecade = decade;
             decade += 10;
         }
-        this.selectedDecade = 2010;
     },
     watch: {
         selectedDecade(newValue, oldValue) {
