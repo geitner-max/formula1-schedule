@@ -54,6 +54,21 @@ export default {
               console.log("Error color: ",teamname);
               return "#111";
             }
-          }
+        },
+        parseTime(time) {
+            // convert value to seconds, e.g. 1:30.123
+            let parts = time.split(":");
+            let value = 0.0;
+            if(parts.length === 3) {
+                // HH:mm:ss.sss
+                let parts2 = parts[2].split(".");
+                value = 3600 * Number.parseInt(parts[0]) + 60.0 * Number.parseInt(parts[1]) + Number.parseInt(parts2[0]) + (Number.parseInt(parts2[1])/1000.0);
+            }else if(parts.length === 2) {
+                //mm:ss.sss
+                let parts2 = parts[1].split(".");
+                value = 60 * Number.parseInt(parts[0]) + Number.parseInt(parts2[0]) + (Number.parseInt(parts2[1])/1000.0);
+            }
+            return value;
+        },
     }
 }

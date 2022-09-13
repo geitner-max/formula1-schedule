@@ -1,7 +1,7 @@
 <template>
     <Line
         v-if="chartData !== null"
-        chart-id="line-chart-lap-times"
+        chart-id="line-chart-position-changes"
         :chart-data="chartData"
         :chart-options="chartOptions"
         :width="500"
@@ -9,23 +9,48 @@
     />
 </template>
 
-
 <script>
 import {Line} from 'vue-chartjs';
+import UtilMixin from '../../../util/UtilMixin'
 
 export default {
-    name: "LapTimesChart",
-    mixins: [
-    ],
+    name: "PositionChangesChart",
     components: {
         Line
     },
+    mixins: [
+        UtilMixin,
+    ],
     setup() {
         
     },
     data() {
         return {
-            
+            chartOptions: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: {
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 60,
+                            minRotation: 60
+                        }
+                    },
+                    yAxes: {
+                        reverse: true,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+            },
         };
     },
     props: {
@@ -35,38 +60,7 @@ export default {
         lapTimes: {
             required: true,
         },
-        chartOptions: {
-            required: true,
-        },
-    },
-    mounted() {
-        // compute chart data
-        //
-        
-        
-    },
-    methods: {
-        parseTime(time) {
-            // convert value to seconds, e.g. 1:30.123
-            let parts = time.split(":");
-            let value = 0.0;
-            if(parts.length === 3) {
-                // HH:mm:ss.sss
-                let parts2 = parts[2].split(".");
-                value = 3600 * Number.parseInt(parts[0]) + 60.0 * Number.parseInt(parts[1]) + Number.parseInt(parts2[0]) + (Number.parseInt(parts2[1])/1000.0);
-            }else if(parts.length === 2) {
-                //mm:ss.sss
-                let parts2 = parts[1].split(".");
-                value = 60 * Number.parseInt(parts[0]) + Number.parseInt(parts2[0]) + (Number.parseInt(parts2[1])/1000.0);
-            }
-            return value;
-        },
-    },
-    watch: {
-        /*lapTimes(newValue) {
-            console.log("init");
-            console.log(newValue);
-        }*/
+      
     },
     computed: {
         chartData() {
@@ -86,10 +80,10 @@ export default {
                     for (let lap of lapDriverData) {
                         
                         //console.log(value);
-                        data.push(this.parseTime(lap.time));
+                        data.push(lap.position);
                     }
                     console.log(data);
-                    datasets.push({label: label, borderColor: teamColor, backgroundColor: teamColor, data: data, hidden: true});
+                    datasets.push({label: label, borderColor: teamColor, backgroundColor: teamColor, data: data, hidden: false});
                 }
             }
             let labelMapping = Array.from({length: lapsTotal}, (_, i) => "Lap " + (i + 1));
@@ -97,6 +91,5 @@ export default {
             return result;
         }
     }
-
 }
 </script>

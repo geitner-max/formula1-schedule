@@ -54,7 +54,7 @@
 
 <script>
 import FetchMixin from '../util/FetchMixin';
-import StandingsChart from './subcomponents/StandingsChart.vue';
+import StandingsChart from './subcomponents/charts/StandingsChart.vue';
 import UtilMixin from '../util/UtilMixin';
 
 export default {
