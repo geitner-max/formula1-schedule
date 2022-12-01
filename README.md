@@ -17,12 +17,15 @@ npm install
 ```
 Running application for development purposes: 
 ```
-npm serve
+npm run dev
 ```
 Compile the project for production:
 ```
-npm build
+npm run build
 ```
+## Recommended IDE Setup
+
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
 
 ## Compile Theme Colors
@@ -30,3 +33,4 @@ npm build
 sass src/theme/custom.scss:src/theme/custom.css
 
 ```
+

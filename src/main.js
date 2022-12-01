@@ -7,14 +7,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import "bootstrap";
 
-import ScheduleScreen from '/src/components/ScheduleScreen';
-import Standings from '/src/components/Standings';
+import ScheduleScreen from './components/ScheduleScreen.vue';
+import Standings from './components/Standings.vue';
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 
-import "@/theme/custom.css";
-import "@/main.css";
-import PageNotFound from '/src/components/PageNotFound';
+import "./theme/custom.css";
+import "./main.css";
+import PageNotFound from './components/PageNotFound.vue';
 
 // 1. Define some routes
 // Each route should map to a component.
