@@ -1,8 +1,5 @@
 name: Build Vue
-on: 
-  push:
-    branches:
-    - main
+on: [push]
 jobs:
   build_vue:
     runs-on: ubuntu-latest
@@ -13,6 +10,6 @@ jobs:
       uses: xRealNeon/VuePagesAction@1.0.1
       with:
         username: 'geitner-max'
-        reponame: 'formula1-schedule '
-        token: ${{ secrets.ACTION_TOKEN }}
+        reponame: 'formula1-schedule'
+        token: ${{ secrets.GITHUB_TOKEN }}
         
