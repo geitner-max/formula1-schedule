@@ -29,7 +29,7 @@ const routes = [
 // 2. Create the router instance and pass the `routes` option
 const router = createRouter({
     // 3. Provide the history implementation to use. We are using the hash history for simplicity here.
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes, // short for `routes: routes`
   })
   
