@@ -19,6 +19,7 @@
     "sass": "^1.51.0",
     "vue": "^3.2.33",
     "vue-axios": "^3.2.5",
+    "vue-chartjs": "^4.1.2",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
