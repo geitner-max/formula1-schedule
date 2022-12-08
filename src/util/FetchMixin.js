@@ -118,7 +118,7 @@ export default {
             return localRaceResult;
           }else {
             console.log(year, round);
-            const apiRequest = `http://ergast.com/api/f1/${year}/${round}/results.json`;
+            const apiRequest = `${this.API_ENDPOINT}/${year}/${round}/results.json`;
             console.log(apiRequest);
             let response = await this.axios.get(apiRequest);
             if(response.status === 200) {
