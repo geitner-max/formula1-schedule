@@ -7,21 +7,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import "bootstrap";
 
-import ScheduleScreen from '/src/components/ScheduleScreen';
-import Standings from '/src/components/Standings';
-import Analysis from '/src/components/Analysis';
-
-
-// tooltip
-import FloatingVue from 'floating-vue'
-import 'floating-vue/dist/style.css'
-
+import ScheduleScreen from './components/ScheduleScreen.vue';
+import Standings from './components/Standings.vue';
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 
-import "@/theme/custom.css";
-import "@/main.css";
-import PageNotFound from '/src/components/PageNotFound';
+import "./theme/custom.css";
+import "./main.css";
+import PageNotFound from './components/PageNotFound.vue';
 
 // 1. Define some routes
 // Each route should map to a component.
@@ -37,7 +30,7 @@ const routes = [
 // 2. Create the router instance and pass the `routes` option
 const router = createRouter({
     // 3. Provide the history implementation to use. We are using the hash history for simplicity here.
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes, // short for `routes: routes`
   })
   
