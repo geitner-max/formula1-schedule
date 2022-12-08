@@ -6,9 +6,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 //import { BootstrapVue, } from 'bootstrap-vue';
 
 import "bootstrap";
+// Tooltip
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css';
 
 import ScheduleScreen from './components/ScheduleScreen.vue';
 import Standings from './components/Standings.vue';
+import Analysis from './components/Analysis.vue';
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 
