@@ -14,6 +14,11 @@ export default {
     created() {
         this.axios = inject('axios');
     },
+    data() {
+      return {
+        API_ENDPOINT: "https://ergast.com/api/f1",
+      };
+    },
     methods: {
         async fetchCurrentConstructorStandings() {
         if(this.useLocalData){
@@ -25,7 +30,7 @@ export default {
             const data = this.getWithExpiry("currentConstructorStandings");
             if(!data) {
               // fetch request, if data expired
-              const apiRequest = "http://ergast.com/api/f1/current/constructorStandings.json";
+              const apiRequest = this.API_ENDPOINT + "/current/constructorStandings.json";
               let response = await this.axios.get(apiRequest);
               if (response.status !== 200) {
                   console.log("Error, no valid response received");
@@ -49,7 +54,7 @@ export default {
             return data[key];
           } else {
             // fetch data from api
-            const apiRequest = "http://ergast.com/api/f1/" + year + "/" + round + "/constructorStandings.json";
+            const apiRequest = this.API_ENDPOINT + "/" + year + "/" + round + "/constructorStandings.json";
             const response = await this.axios.get(apiRequest);
             if (response.status !== 200) {
                 console.log("Error, no valid response received");
@@ -74,7 +79,7 @@ export default {
                 const data = this.getWithExpiry("currentDriverStandings");
                 if(!data) {
                   // fetch request, if data expired
-                  const apiRequest = "http://ergast.com/api/f1/current/driverStandings.json";
+                  const apiRequest = this.API_ENDPOINT + "/current/driverStandings.json";
                   let response = await this.axios.get(apiRequest);
                   if (response.status !== 200) {
                       console.log("Error, no valid response received");
@@ -89,7 +94,7 @@ export default {
             }
         },
         async fetchRaceSchedule(year) {
-          const apiRequest = "http://ergast.com/api/f1/" + year + ".json";
+          const apiRequest = this.API_ENDPOINT + "/" + year + ".json";
           // send request and process response
           let response = await this.axios.get(apiRequest); //.then((response) => {
           if(response.status !== 200){
@@ -134,7 +139,7 @@ export default {
               return {status: 200, data: lapTimes3};
             }
           }else{
-            const apiRequest = `http://ergast.com/api/f1/${year}/${round}/laps.json?limit=${limit}&offset=${offset}`;
+            const apiRequest = `${this.API_ENDPOINT}/${year}/${round}/laps.json?limit=${limit}&offset=${offset}`;
             //http://ergast.com/api/f1/2011/5/laps.json?limit=30&offset=100
             console.log(apiRequest);
             let response = await this.axios.get(apiRequest);
