@@ -1,6 +1,6 @@
 {
   "name": "formula1-schedule",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -12,9 +12,11 @@
     "@mdi/js": "^7.0.96",
     "axios": "^1.2.0",
     "bootstrap": "^5.2.3",
+    "floating-vue": "^2.0.0-beta.20",
     "vue": "^3.2.45",
     "vue-axios": "^3.5.2",
     "vue-chartjs": "^4.1.2",
+    "vue-country-flag-next": "^2.3.2",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

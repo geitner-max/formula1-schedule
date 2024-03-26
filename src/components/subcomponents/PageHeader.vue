@@ -5,9 +5,11 @@
         <nav class="navbar navbar-expand-lg navbar-light">
             
             <ul>
-                <li @click="onClickSchedule" type="button" class="btn btn-primary" variant="outline-primary"> Schedule</li>
+                <router-link to="/" type="button" class="btn btn-primary" variant="outline-primary"> Schedule</router-link>
                 
-                <li @click="onClickStandings" type="button" class="btn btn-primary" variant="outline-primary"> Standings</li>
+                <router-link to="/standings" type="button" class="btn btn-primary" variant="outline-primary">Standings</router-link>
+
+                <router-link to="/analysis" type="button" class="btn btn-primary" variant="outline-primary">Analysis</router-link>
             </ul>
         </nav> 
     </div>
@@ -25,6 +27,9 @@ export default {
         },
         onClickStandings() {
             this.$router.push("/standings");
+        },
+        onClickAnalysis() {
+            this.$router.push("/analysis");
         }
     },
 }

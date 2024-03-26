@@ -9,6 +9,8 @@ export default {
     "Aston Martin":	"#2D826D",
     "Williams":	"#37BEDD",
     "Alfa Romeo":	"#B12039",
-    "Haas F1 Team": "#B6BABD"
+    "Haas F1 Team": "#B6BABD",
+    "RB F1 Team": "#6692FF",
+    "Sauber": 	"#52E252"
 }
 

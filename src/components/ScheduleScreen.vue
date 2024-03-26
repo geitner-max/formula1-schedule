@@ -1,8 +1,6 @@
 <template>
 <div v-if="hasValidData" class="root-container">
-  <div class="box-container">
-    <next-track-box-item :raceTrack="selectedRaceTrack"></next-track-box-item>
-  </div>
+  <next-track-box-item :raceTrack="selectedRaceTrack"></next-track-box-item>
   <div class="schedule-container" v-if="listFutureRaces.length > 0">
     <p>Schedule: </p>
     <next-track-list-item v-for="item in listFutureRaces" :key="item.round" :raceTrack="item">
