@@ -44,6 +44,7 @@
             <lap-times-chart v-if="selectedChart === 1" :chartOptions="chartOptions" :lapTimes="laptimeData" :driverMapping="driverMapping" />
             <position-changes-chart v-if="selectedChart === 2" :lapTimes="laptimeData" :driverMapping="driverMapping" />
             <leader-gap-chart v-if="selectedChart === 3" :lapTimes="laptimeData" :driverMapping="driverMapping" />
+            <driver-time-difference-chart v-if="selectedChart === 4" :lapTimes="laptimeData" :driverMapping="driverMapping" />
         </div>
         
     </div>
@@ -59,12 +60,14 @@ import LapTimesChart from './subcomponents/charts/LapTimesChart.vue';
 import UtilMixin from '../util/UtilMixin';
 import PositionChangesChart from './subcomponents/charts/PositionChangesChart.vue';
 import LeaderGapChart from './subcomponents/charts/LeaderGapChart.vue';
+import DriverTimeDifferenceChart from './subcomponents/charts/DriverTimeDifferenceChart.vue';
 export default {
   components: { 
     RaceResultTable,
     LapTimesChart,
     PositionChangesChart,
-    LeaderGapChart 
+    LeaderGapChart,
+    DriverTimeDifferenceChart 
   },
     name: "Analysis",
    
@@ -85,7 +88,7 @@ export default {
             optionRounds: [],
             dataRaceResult: null,//[{name: "Sebastian", startingPos: "1", finishingPos: "1", totalTime: "1:34:45", fastestLap: "1:45:123"}],
             // "Laptimes by Stint (1)", "Laptimes By Stint (2)"
-            optionCharts: ["Laptimes", "Position Changes", "Gap To Leader", ],
+            optionCharts: ["Laptimes", "Position Changes", "Gap To Leader", "Driver Time Difference"],
             selectedChart: 0,
             driverMapping: null,
             laptimeData: null,

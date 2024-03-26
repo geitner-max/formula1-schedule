@@ -70,5 +70,27 @@ export default {
             }
             return value;
         },
+        valueToTime(timeSeconds, includeHours) {
+            if (timeSeconds === null) {
+                return "N/A"
+            }
+            
+            const isNegative = timeSeconds < 0;
+            timeSeconds = Math.abs(timeSeconds);
+            timeSeconds = Math.round(timeSeconds * 1000) / 1000;
+            let hours = Math.floor(timeSeconds / 3600);
+            let minutes = Math.floor(timeSeconds / 60) % 60;
+            let seconds = Math.floor(timeSeconds) % 60;
+            let milliseconds = Math.floor(timeSeconds * 1000) % 1000;
+            let result = "";
+            if (isNegative) {
+                result +="-";
+            }
+            if (includeHours) {
+                result += String(hours).padStart(2, "0") + ":";
+            }
+            result += String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0") + "." + String(milliseconds).padStart(2, "0");
+            return result;
+        }
     }
 }

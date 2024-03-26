@@ -1,8 +1,8 @@
 <template>
     <footer >
         <div class="footer-container">
-          <span class="footer-text">Version 0.1.0</span>
-          <span class="footer-text">Site Design by Maximilian Geitner 2022</span>
+          <span class="footer-text">Version 0.2.1</span>
+          <span class="footer-text">Site Design by Maximilian Geitner 2024</span>
           <span class="footer-text"></span>
           <a class="a-footer" :href="varInternal">Contact: {{varProtected}}</a>
         </div>
